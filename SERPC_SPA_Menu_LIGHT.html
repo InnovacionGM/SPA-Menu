@@ -875,6 +875,132 @@ body.es span.es-inline{display:inline;}
 
 .bg-r9{background:linear-gradient(135deg,#1A2E18,#0E2010);}
 
+
+/* ── PRICE EDITOR TAB ── */
+.admin-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(196,160,96,0.2);
+}
+.admin-tab {
+  font-family: 'Tenor Sans', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.35);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all .2s;
+  margin-bottom: -1px;
+}
+.admin-tab.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.admin-tab-pane { display: none; }
+.admin-tab-pane.active { display: block; }
+
+/* Price editor rows */
+.price-group-label {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 18px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(196,160,96,0.15);
+}
+.price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  gap: 12px;
+}
+.price-row-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  flex: 1;
+  line-height: 1.4;
+}
+.price-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.price-dollar {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  color: var(--gold);
+}
+.price-input {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: var(--white);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(196,160,96,0.2);
+  border-radius: 3px;
+  padding: 4px 8px;
+  width: 72px;
+  text-align: center;
+  outline: none;
+  transition: border-color .2s;
+}
+.price-input:focus {
+  border-color: var(--gold);
+  background: rgba(255,255,255,0.1);
+}
+.price-save-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--gold);
+  border: none;
+  color: var(--ink);
+  font-family: 'Tenor Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all .2s;
+}
+.price-save-btn:hover { background: var(--gold-lt); }
+.price-reset-btn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px;
+  background: transparent;
+  border: 1px solid rgba(196,160,96,0.2);
+  color: rgba(255,255,255,0.3);
+  font-family: 'Tenor Sans', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all .2s;
+}
+.price-reset-btn:hover { border-color: var(--gold); color: var(--gold); }
+.price-saved-msg {
+  text-align: center;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-top: 8px;
+  min-height: 16px;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.price-saved-msg.show { opacity: 1; }
+
 /* ══════════════════════════════════════════════
    SERPC SPA MENU — LIGHT VERSION
    Palette: Colonial White · Noble Gold · Section Colors
@@ -1255,6 +1381,7 @@ body {
 .enhancers-inner h2 { color: #1C1508 !important; }
 .enhancers-inner h2 em { color: #5C3D10 !important; font-style: italic !important; }
 .nails-section h2 em { color: #5C3D10 !important; font-style: italic !important; }
+
 
 </style>
 <script>
@@ -2635,22 +2762,120 @@ window.addEventListener('scroll', function(){
   <!-- ADMIN CONTENT -->
   <div class="admin-content-v2" id="adminContentV2">
     <div class="admin-title-v2">Admin Panel</div>
-    <div class="admin-sub-v2">Spa Menu · Ritual Management · SERPC</div>
-    <div class="admin-sec-label">
-      <span class="en-inline">Activate / Deactivate Signature Rituals</span>
-      <span class="es-inline">Activar / Desactivar Rituales Signature</span>
+    <div class="admin-sub-v2">Spa Menu · Management · SERPC</div>
+
+    <!-- TABS -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchTab('rituals')">
+        <span class="en-inline">Rituals</span><span class="es-inline">Rituales</span>
+      </button>
+      <button class="admin-tab" onclick="switchTab('prices')" id="priceTabBtn">
+        <span class="en-inline">Prices</span><span class="es-inline">Precios</span>
+      </button>
     </div>
-    <div id="ritualTogglesV2"></div>
-    <div class="admin-count-box">
-      <span id="activeCountV2">0</span>
-      <span class="en-inline">rituals currently visible to guests</span>
-      <span class="es-inline">rituales visibles para los huéspedes</span>
+
+    <!-- TAB: RITUALS -->
+    <div class="admin-tab-pane active" id="tab-rituals">
+      <div class="admin-sec-label">
+        <span class="en-inline">Activate / Deactivate Signature Rituals</span>
+        <span class="es-inline">Activar / Desactivar Rituales Signature</span>
+      </div>
+      <div id="ritualTogglesV2"></div>
+      <div class="admin-count-box">
+        <span id="activeCountV2">0</span>
+        <span class="en-inline">rituals currently visible to guests</span>
+        <span class="es-inline">rituales visibles para los huéspedes</span>
+      </div>
+      <div class="admin-info-box">
+        <span class="en-inline">✦ Changes apply instantly &nbsp;·&nbsp; Min. 3 active recommended &nbsp;·&nbsp; Rotate every 4–6 weeks</span>
+        <span class="es-inline">✦ Los cambios aplican al instante &nbsp;·&nbsp; Mínimo 3 activos recomendado &nbsp;·&nbsp; Rotar cada 4–6 semanas</span>
+      </div>
     </div>
-    <div class="admin-info-box">
-      <span class="en-inline">✦ Changes apply instantly &nbsp;·&nbsp; Min. 3 active recommended &nbsp;·&nbsp; Rotate every 4–6 weeks for maximum interest</span>
-      <span class="es-inline">✦ Los cambios aplican al instante &nbsp;·&nbsp; Mínimo 3 activos recomendado &nbsp;·&nbsp; Rotar cada 4–6 semanas</span>
+
+    <!-- TAB: PRICES (PIN protected separately) -->
+    <div class="admin-tab-pane" id="tab-prices">
+      <!-- Price PIN screen -->
+      <div id="pricePinScreen">
+        <div style="text-align:center;padding:24px 0 20px;">
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px;">
+            <span class="en-inline">Price Editor · Manager Access</span>
+            <span class="es-inline">Editor de Precios · Acceso Gerentes</span>
+          </div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-lt);margin-bottom:20px;">
+            <span class="en-inline">Enter Manager PIN</span>
+            <span class="es-inline">Ingrese PIN de Gerente</span>
+          </div>
+          <div class="pin-dots" id="pricePinDots" style="justify-content:center;">
+            <div class="pin-dot" id="ppdot0"></div>
+            <div class="pin-dot" id="ppdot1"></div>
+            <div class="pin-dot" id="ppdot2"></div>
+            <div class="pin-dot" id="ppdot3"></div>
+          </div>
+          <div class="pin-error-msg" id="pricePinErr" style="margin-top:8px;"></div>
+        </div>
+        <div class="pin-pad" style="max-width:220px;margin:0 auto;">
+          <button class="pin-btn" onclick="pricePin('1')">1</button>
+          <button class="pin-btn" onclick="pricePin('2')">2</button>
+          <button class="pin-btn" onclick="pricePin('3')">3</button>
+          <button class="pin-btn" onclick="pricePin('4')">4</button>
+          <button class="pin-btn" onclick="pricePin('5')">5</button>
+          <button class="pin-btn" onclick="pricePin('6')">6</button>
+          <button class="pin-btn" onclick="pricePin('7')">7</button>
+          <button class="pin-btn" onclick="pricePin('8')">8</button>
+          <button class="pin-btn" onclick="pricePin('9')">9</button>
+          <button class="pin-btn pin-zero" onclick="pricePin('0')">0</button>
+          <button class="pin-btn del-btn" onclick="pricePinDel()">⌫</button>
+        </div>
+      </div>
+
+      <!-- Price Editor (shown after PIN) -->
+      <div id="priceEditorContent" style="display:none;">
+        <div class="price-group-label">
+          <span class="en-inline">Signature Rituals — Couple Price</span>
+          <span class="es-inline">Rituales Signature — Precio en Pareja</span>
+        </div>
+        <div id="priceRowsRituals"></div>
+
+        <div class="price-group-label">
+          <span class="en-inline">Massage Therapy</span>
+          <span class="es-inline">Terapia de Masajes</span>
+        </div>
+        <div id="priceRowsMassage"></div>
+
+        <div class="price-group-label">
+          <span class="en-inline">Facial Experiences</span>
+          <span class="es-inline">Experiencias Faciales</span>
+        </div>
+        <div id="priceRowsFacial"></div>
+
+        <div class="price-group-label">
+          <span class="en-inline">Body Experiences</span>
+          <span class="es-inline">Experiencias Corporales</span>
+        </div>
+        <div id="priceRowsBody"></div>
+
+        <div class="price-group-label">
+          <span class="en-inline">Hands &amp; Feet</span>
+          <span class="es-inline">Manos &amp; Pies</span>
+        </div>
+        <div id="priceRowsNails"></div>
+
+        <button class="price-save-btn" onclick="savePrices()">
+          <span class="en-inline">✦ Save All Prices</span>
+          <span class="es-inline">✦ Guardar Todos los Precios</span>
+        </button>
+        <button class="price-reset-btn" onclick="resetPrices()">
+          <span class="en-inline">Reset to original prices</span>
+          <span class="es-inline">Restaurar precios originales</span>
+        </button>
+        <div class="price-saved-msg" id="priceSavedMsg">
+          <span class="en-inline">✦ Prices updated successfully</span>
+          <span class="es-inline">✦ Precios actualizados correctamente</span>
+        </div>
+      </div>
     </div>
-    <button class="admin-lock-btn" onclick="lockAdminV2()">⚿ &nbsp;<span class="en-inline">Lock &amp; Exit</span><span class="es-inline">Bloquear y Salir</span></button>
+
+    <button class="admin-lock-btn" onclick="lockAdminV2()" style="margin-top:20px;">⚿ &nbsp;<span class="en-inline">Lock &amp; Exit</span><span class="es-inline">Bloquear y Salir</span></button>
   </div>
 </div>
 
@@ -2779,6 +3004,168 @@ function lockAdminV2() {
 
 // ─── INIT ───
 applyRitualState();
+
+
+// ─────────────────────────────────────────────────────
+// PRICE EDITOR SYSTEM — PIN: 1614
+// ─────────────────────────────────────────────────────
+
+var DEFAULT_PRICES = {
+  'r1-couple':{label:'Moonlight Romance Ritual',labelEs:'Ritual de Romance Luz de Luna',val:420},
+  'r2-couple':{label:'Tropical Zen Bamboo Journey',labelEs:'Viaje Zen de Bambú Tropical',val:440},
+  'r3-couple':{label:'Hispaniola Cacao Bliss',labelEs:'Hispaniola Éxtasis de Cacao',val:400},
+  'r4-couple':{label:'Blue Lagoon Deep Sea Connection',labelEs:'Laguna Azul Mar Profundo',val:380},
+  'r5-couple':{label:"The Traveler's Reset",labelEs:'El Reinicio del Viajero',val:380},
+  'r6-couple':{label:'Aloe & Quartz Sun Healing',labelEs:'Aloe y Cuarzo Sanación Solar',val:390},
+  'r7-couple':{label:'Caribbean Soulmates',labelEs:'Caribe Almas Gemelas',val:460},
+  'r8-couple':{label:'Pure Gold Anniversary Glow',labelEs:'Oro Puro Resplandor de Aniversario',val:520},
+  'r9-couple':{label:'Moringaia Signature Ritual',labelEs:'Ritual Signature Moringaia',val:520},
+  'm-swedish-50':{label:'Pure Bliss Swedish · 50 min',labelEs:'Masaje Sueco Pure Bliss · 50 min',val:215},
+  'm-swedish-80':{label:'Pure Bliss Swedish · 80 min',labelEs:'Masaje Sueco · 80 min',val:249},
+  'm-tissue-50':{label:'Euphoric Deep Tissue · 50 min',labelEs:'Tejido Profundo Eufórico · 50 min',val:229},
+  'm-tissue-80':{label:'Euphoric Deep Tissue · 80 min',labelEs:'Tejido Profundo Eufórico · 80 min',val:269},
+  'm-stone':{label:'Volcanic Stone Ritual · 80 min',labelEs:'Masaje Piedras Volcánicas · 80 min',val:285},
+  'm-aroma-50':{label:'Caribbean Aromatherapy · 50 min',labelEs:'Aromaterapia Caribeña · 50 min',val:225},
+  'm-aroma-80':{label:'Caribbean Aromatherapy · 80 min',labelEs:'Aromaterapia Caribeña · 80 min',val:259},
+  'm-prenatal-50':{label:'Prenatal Wellness · 50 min',labelEs:'Bienestar Prenatal · 50 min',val:189},
+  'm-prenatal-75':{label:'Prenatal Wellness · 75 min',labelEs:'Bienestar Prenatal · 75 min',val:219},
+  'f-botox':{label:'Collagen Botox Effect Facial',labelEs:'Facial Efecto Botox con Colágeno',val:259},
+  'f-vitc':{label:'Vitamin C Radiance Facial',labelEs:'Facial Luminosidad Vitamina C',val:235},
+  'f-hydro':{label:'Hydro Vegan Glow Facial',labelEs:'Facial Hidro Vegano Luminoso',val:215},
+  'f-detox':{label:'Deep Cleansing Detox Facial · 80 min',labelEs:'Facial Detox Limpieza Profunda · 80 min',val:275},
+  'f-barber':{label:'Barber Experience Facial',labelEs:'Facial Experiencia Barbero para Él',val:215},
+  'f-aftersun':{label:'After Sun Recovery Facial',labelEs:'Facial Recuperación After Sun',val:215},
+  'b-aftersun':{label:'After Sun Body Wrap',labelEs:'Envoltura Corporal After Sun',val:229},
+  'b-earth':{label:'Earth Experience Wrap',labelEs:'Envoltura Experiencia Tierra',val:209},
+  'b-ocean':{label:'Ocean Experience Wrap',labelEs:'Envoltura Experiencia Océano',val:209},
+  'b-algae':{label:'Detox Algae Body Wrap',labelEs:'Envoltura Detox de Algas',val:209},
+  'n-mani':{label:'Spa Manicure',labelEs:'Manicura Spa',val:69},
+  'n-pedi':{label:'Spa Pedicure',labelEs:'Pedicura Spa',val:85},
+  'n-gel-change':{label:'Gel Polish Change',labelEs:'Cambio Esmalte Gel',val:45},
+  'n-classic':{label:'Classic Polish Change',labelEs:'Cambio Esmalte Clásico',val:35},
+  'n-gel-remove':{label:'Gel Polish Removal',labelEs:'Remoción Esmalte Gel',val:49},
+};
+
+var PRICE_GROUPS = {
+  rituals:['r1-couple','r2-couple','r3-couple','r4-couple','r5-couple','r6-couple','r7-couple','r8-couple','r9-couple'],
+  massage:['m-swedish-50','m-swedish-80','m-tissue-50','m-tissue-80','m-stone','m-aroma-50','m-aroma-80','m-prenatal-50','m-prenatal-75'],
+  facial:['f-botox','f-vitc','f-hydro','f-detox','f-barber','f-aftersun'],
+  body:['b-aftersun','b-earth','b-ocean','b-algae'],
+  nails:['n-mani','n-pedi','n-gel-change','n-classic','n-gel-remove'],
+};
+
+function loadPrices(){try{var s=localStorage.getItem('serpc-prices-v1');if(s)return JSON.parse(s);}catch(e){}var d={};Object.keys(DEFAULT_PRICES).forEach(function(k){d[k]=DEFAULT_PRICES[k].val;});return d;}
+function savePricesData(d){try{localStorage.setItem('serpc-prices-v1',JSON.stringify(d));}catch(e){}}
+
+function applyAllPrices(){
+  var prices=loadPrices();
+  // Ritual couple prices
+  document.querySelectorAll('[data-ritual]').forEach(function(card){
+    var id=card.getAttribute('data-ritual');
+    var pid='r'+id+'-couple';
+    if(!prices[pid])return;
+    var el=card.querySelector('.ritual-price-couple');
+    if(el)el.textContent='$'+prices[pid];
+  });
+  // Section-based prices
+  var sections={
+    'massages':{
+      main:['m-swedish-50','m-tissue-50','m-stone','m-aroma-50','m-prenatal-50'],
+      notes:['m-swedish-80','m-tissue-80','m-aroma-80','m-prenatal-75'],
+      notePrefix:['80 min · $','80 min · $','80 min · $','75 min · $']
+    },
+    'facials':{main:['f-botox','f-vitc','f-hydro','f-detox','f-barber','f-aftersun'],notes:[],notePrefix:[]},
+    'body':{main:['b-aftersun','b-earth','b-ocean','b-algae'],notes:[],notePrefix:[]},
+  };
+  Object.keys(sections).forEach(function(sid){
+    var sec=document.getElementById(sid);if(!sec)return;
+    var cfg=sections[sid];
+    var mainEls=sec.querySelectorAll('.t-card-price-main');
+    cfg.main.forEach(function(k,i){if(mainEls[i]&&prices[k])mainEls[i].textContent='$'+prices[k];});
+    var noteEls=sec.querySelectorAll('.t-card-price-note');
+    cfg.notes.forEach(function(k,i){if(noteEls[i]&&prices[k])noteEls[i].textContent=cfg.notePrefix[i]+'$'+prices[k];});
+  });
+  // Nails
+  var nailsSec=document.getElementById('nails');
+  if(nailsSec){var minis=nailsSec.querySelectorAll('.mini-price');PRICE_GROUPS.nails.forEach(function(k,i){if(minis[i]&&prices[k])minis[i].textContent='$'+prices[k];});}
+}
+
+// ─── PRICE PIN ───
+var PRICE_PIN='1614',pricePinStr='',pricePinUnlocked=false,pricePinAttempts=0,pricePinLocked=false,ppLockTmr=null;
+function pricePin(d){if(pricePinLocked||pricePinStr.length>=4)return;pricePinStr+=d;updPPDots();if(pricePinStr.length===4)setTimeout(checkPricePin,120);}
+function pricePinDel(){if(pricePinLocked)return;pricePinStr=pricePinStr.slice(0,-1);updPPDots();}
+function updPPDots(){for(var i=0;i<4;i++){var d=document.getElementById('ppdot'+i);if(d)d.classList.toggle('filled',i<pricePinStr.length);}}
+function checkPricePin(){
+  if(pricePinStr===PRICE_PIN){
+    pricePinUnlocked=true;pricePinAttempts=0;
+    document.getElementById('pricePinScreen').style.display='none';
+    document.getElementById('priceEditorContent').style.display='block';
+    buildPriceEditor();
+  } else {
+    pricePinAttempts++;pricePinStr='';updPPDots();
+    var err=document.getElementById('pricePinErr');
+    if(pricePinAttempts>=3){
+      pricePinLocked=true;var rem=30;
+      err.textContent='Locked · '+rem+'s';
+      ppLockTmr=setInterval(function(){rem--;err.textContent='Locked · '+rem+'s';if(rem<=0){clearInterval(ppLockTmr);pricePinLocked=false;pricePinAttempts=0;err.textContent='';}},1000);
+    } else {
+      err.textContent='Incorrect PIN · '+(3-pricePinAttempts)+' remaining';
+    }
+  }
+}
+
+// ─── PRICE EDITOR UI ───
+function buildPriceEditor(){
+  var prices=loadPrices();
+  var isEs=document.body.classList.contains('es');
+  var groupMap={rituals:'priceRowsRituals',massage:'priceRowsMassage',facial:'priceRowsFacial',body:'priceRowsBody',nails:'priceRowsNails'};
+  Object.keys(groupMap).forEach(function(grp){
+    var el=document.getElementById(groupMap[grp]);if(!el)return;
+    el.innerHTML=PRICE_GROUPS[grp].map(function(key){
+      var def=DEFAULT_PRICES[key];if(!def)return'';
+      var lbl=isEs?def.labelEs:def.label;
+      var val=prices[key]||def.val;
+      return'<div class="price-row"><div class="price-row-label">'+lbl+'</div><div class="price-input-wrap"><span class="price-dollar">$</span><input class="price-input" type="number" id="pi-'+key+'" value="'+val+'" min="0" max="9999"></div></div>';
+    }).join('');
+  });
+}
+
+function savePrices(){
+  var newP={};
+  Object.keys(DEFAULT_PRICES).forEach(function(k){
+    var el=document.getElementById('pi-'+k);
+    newP[k]=el?Math.max(0,parseInt(el.value)||DEFAULT_PRICES[k].val):loadPrices()[k]||DEFAULT_PRICES[k].val;
+  });
+  savePricesData(newP);applyAllPrices();
+  var msg=document.getElementById('priceSavedMsg');
+  if(msg){msg.classList.add('show');setTimeout(function(){msg.classList.remove('show');},3000);}
+}
+
+function resetPrices(){
+  if(!confirm('Reset all prices to original values?'))return;
+  localStorage.removeItem('serpc-prices-v1');
+  applyAllPrices();buildPriceEditor();
+  var msg=document.getElementById('priceSavedMsg');
+  if(msg){msg.classList.add('show');setTimeout(function(){msg.classList.remove('show');},2500);}
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.admin-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.admin-tab-pane').forEach(function(p){p.classList.remove('active');});
+  var btn=document.querySelector('.admin-tab[onclick="switchTab(\'' + tab + '\')"]');
+  var pane=document.getElementById('tab-'+tab);
+  if(btn)btn.classList.add('active');
+  if(pane)pane.classList.add('active');
+  if(tab==='prices'&&pricePinUnlocked){
+    document.getElementById('pricePinScreen').style.display='none';
+    document.getElementById('priceEditorContent').style.display='block';
+    buildPriceEditor();
+  }
+}
+
+// Apply prices on page load
+document.addEventListener('DOMContentLoaded', function(){applyAllPrices();});
+
 </script>
 
 </body>

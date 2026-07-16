@@ -875,6 +875,132 @@ body.es span.es-inline{display:inline;}
 
 .bg-r9{background:linear-gradient(135deg,#1A2E18,#0E2010);}
 
+
+/* ── PRICE EDITOR TAB ── */
+.admin-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(196,160,96,0.2);
+}
+.admin-tab {
+  font-family: 'Tenor Sans', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.35);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all .2s;
+  margin-bottom: -1px;
+}
+.admin-tab.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.admin-tab-pane { display: none; }
+.admin-tab-pane.active { display: block; }
+
+/* Price editor rows */
+.price-group-label {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 18px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(196,160,96,0.15);
+}
+.price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  gap: 12px;
+}
+.price-row-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  flex: 1;
+  line-height: 1.4;
+}
+.price-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.price-dollar {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  color: var(--gold);
+}
+.price-input {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: var(--white);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(196,160,96,0.2);
+  border-radius: 3px;
+  padding: 4px 8px;
+  width: 72px;
+  text-align: center;
+  outline: none;
+  transition: border-color .2s;
+}
+.price-input:focus {
+  border-color: var(--gold);
+  background: rgba(255,255,255,0.1);
+}
+.price-save-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--gold);
+  border: none;
+  color: var(--ink);
+  font-family: 'Tenor Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all .2s;
+}
+.price-save-btn:hover { background: var(--gold-lt); }
+.price-reset-btn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px;
+  background: transparent;
+  border: 1px solid rgba(196,160,96,0.2);
+  color: rgba(255,255,255,0.3);
+  font-family: 'Tenor Sans', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all .2s;
+}
+.price-reset-btn:hover { border-color: var(--gold); color: var(--gold); }
+.price-saved-msg {
+  text-align: center;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-top: 8px;
+  min-height: 16px;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.price-saved-msg.show { opacity: 1; }
+
 </style>
 <script>
 var SERPC_LOGO_URI = "data:image/png;base64,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/FUtX8JUSQefTSiSGXocW9bHjs5p1sEdiCCsREF7VEONcx8f4tC3MLDiuV4rbW2ianvtWKalrqZji6KSKUjQeNuDmn1J9hrcZk4yx+353iuN1nJWKXBlyqD+lqugrmmkt0LSCSah/Sxzi3r0O3cAd+oKr0QdWx+IbB6nlqelmwO2xY7VxHG5bn8ZMHi0l3QP1e+gNDdO0B2799qurU2y4lx/zZi8OTWqskL7ZFapoK2N3x7I68P64ek/OQzTj076e+9aVLog6t4j5TxHK8Xv1fnNdTW3Pbdilda4blUTNjbead8WmNkc78VQwtaB324O/aO9Q3EsyxDjbgWmtU1os2X3TMqp1TeKE17m/CU1O4Cnil8o9QcXdUgaT6HuFQiILq8Q+R49yRi+Nck291vtt9cH2i8WhtWHzN8rvBOGuPmPYYz0l5GttDdkqlURAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREH/9k=";
@@ -2254,22 +2380,120 @@ window.addEventListener('scroll', function(){
   <!-- ADMIN CONTENT -->
   <div class="admin-content-v2" id="adminContentV2">
     <div class="admin-title-v2">Admin Panel</div>
-    <div class="admin-sub-v2">Spa Menu · Ritual Management · SERPC</div>
-    <div class="admin-sec-label">
-      <span class="en-inline">Activate / Deactivate Signature Rituals</span>
-      <span class="es-inline">Activar / Desactivar Rituales Signature</span>
+    <div class="admin-sub-v2">Spa Menu · Management · SERPC</div>
+
+    <!-- TABS -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchTab('rituals')">
+        <span class="en-inline">Rituals</span><span class="es-inline">Rituales</span>
+      </button>
+      <button class="admin-tab" onclick="switchTab('prices')" id="priceTabBtn">
+        <span class="en-inline">Prices</span><span class="es-inline">Precios</span>
+      </button>
     </div>
-    <div id="ritualTogglesV2"></div>
-    <div class="admin-count-box">
-      <span id="activeCountV2">0</span>
-      <span class="en-inline">rituals currently visible to guests</span>
-      <span class="es-inline">rituales visibles para los huéspedes</span>
+
+    <!-- TAB: RITUALS -->
+    <div class="admin-tab-pane active" id="tab-rituals">
+      <div class="admin-sec-label">
+        <span class="en-inline">Activate / Deactivate Signature Rituals</span>
+        <span class="es-inline">Activar / Desactivar Rituales Signature</span>
+      </div>
+      <div id="ritualTogglesV2"></div>
+      <div class="admin-count-box">
+        <span id="activeCountV2">0</span>
+        <span class="en-inline">rituals currently visible to guests</span>
+        <span class="es-inline">rituales visibles para los huéspedes</span>
+      </div>
+      <div class="admin-info-box">
+        <span class="en-inline">✦ Changes apply instantly &nbsp;·&nbsp; Min. 3 active recommended &nbsp;·&nbsp; Rotate every 4–6 weeks</span>
+        <span class="es-inline">✦ Los cambios aplican al instante &nbsp;·&nbsp; Mínimo 3 activos recomendado &nbsp;·&nbsp; Rotar cada 4–6 semanas</span>
+      </div>
     </div>
-    <div class="admin-info-box">
-      <span class="en-inline">✦ Changes apply instantly &nbsp;·&nbsp; Min. 3 active recommended &nbsp;·&nbsp; Rotate every 4–6 weeks for maximum interest</span>
-      <span class="es-inline">✦ Los cambios aplican al instante &nbsp;·&nbsp; Mínimo 3 activos recomendado &nbsp;·&nbsp; Rotar cada 4–6 semanas</span>
+
+    <!-- TAB: PRICES (PIN protected separately) -->
+    <div class="admin-tab-pane" id="tab-prices">
+      <!-- Price PIN screen -->
+      <div id="pricePinScreen">
+        <div style="text-align:center;padding:24px 0 20px;">
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px;">
+            <span class="en-inline">Price Editor · Manager Access</span>
+            <span class="es-inline">Editor de Precios · Acceso Gerentes</span>
+          </div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-lt);margin-bottom:20px;">
+            <span class="en-inline">Enter Manager PIN</span>
+            <span class="es-inline">Ingrese PIN de Gerente</span>
+          </div>
+          <div class="pin-dots" id="pricePinDots" style="justify-content:center;">
+            <div class="pin-dot" id="ppdot0"></div>
+            <div class="pin-dot" id="ppdot1"></div>
+            <div class="pin-dot" id="ppdot2"></div>
+            <div class="pin-dot" id="ppdot3"></div>
+          </div>
+          <div class="pin-error-msg" id="pricePinErr" style="margin-top:8px;"></div>
+        </div>
+        <div class="pin-pad" style="max-width:220px;margin:0 auto;">
+          <button class="pin-btn" onclick="pricePin('1')">1</button>
+          <button class="pin-btn" onclick="pricePin('2')">2</button>
+          <button class="pin-btn" onclick="pricePin('3')">3</button>
+          <button class="pin-btn" onclick="pricePin('4')">4</button>
+          <button class="pin-btn" onclick="pricePin('5')">5</button>
+          <button class="pin-btn" onclick="pricePin('6')">6</button>
+          <button class="pin-btn" onclick="pricePin('7')">7</button>
+          <button class="pin-btn" onclick="pricePin('8')">8</button>
+          <button class="pin-btn" onclick="pricePin('9')">9</button>
+          <button class="pin-btn pin-zero" onclick="pricePin('0')">0</button>
+          <button class="pin-btn del-btn" onclick="pricePinDel()">⌫</button>
+        </div>
+      </div>
+
+      <!-- Price Editor (shown after PIN) -->
+      <div id="priceEditorContent" style="display:none;">
+        <div class="price-group-label">
+          <span class="en-inline">Signature Rituals — Couple Price</span>
+          <span class="es-inline">Rituales Signature — Precio en Pareja</span>
+        </div>
+        <div id="priceRowsRituals"></div>
+
+        <div class="price-group-label">
+          <span class="en-inline">Massage Therapy</span>
+          <span class="es-inline">Terapia de Masajes</span>
+        </div>
+        <div id="priceRowsMassage"></div>
+
+        <div class="price-group-label">
+          <span class="en-inline">Facial Experiences</span>
+          <span class="es-inline">Experiencias Faciales</span>
+        </div>
+        <div id="priceRowsFacial"></div>
+
+        <div class="price-group-label">
+          <span class="en-inline">Body Experiences</span>
+          <span class="es-inline">Experiencias Corporales</span>
+        </div>
+        <div id="priceRowsBody"></div>
+
+        <div class="price-group-label">
+          <span class="en-inline">Hands &amp; Feet</span>
+          <span class="es-inline">Manos &amp; Pies</span>
+        </div>
+        <div id="priceRowsNails"></div>
+
+        <button class="price-save-btn" onclick="savePrices()">
+          <span class="en-inline">✦ Save All Prices</span>
+          <span class="es-inline">✦ Guardar Todos los Precios</span>
+        </button>
+        <button class="price-reset-btn" onclick="resetPrices()">
+          <span class="en-inline">Reset to original prices</span>
+          <span class="es-inline">Restaurar precios originales</span>
+        </button>
+        <div class="price-saved-msg" id="priceSavedMsg">
+          <span class="en-inline">✦ Prices updated successfully</span>
+          <span class="es-inline">✦ Precios actualizados correctamente</span>
+        </div>
+      </div>
     </div>
-    <button class="admin-lock-btn" onclick="lockAdminV2()">⚿ &nbsp;<span class="en-inline">Lock &amp; Exit</span><span class="es-inline">Bloquear y Salir</span></button>
+
+    <button class="admin-lock-btn" onclick="lockAdminV2()" style="margin-top:20px;">⚿ &nbsp;<span class="en-inline">Lock &amp; Exit</span><span class="es-inline">Bloquear y Salir</span></button>
   </div>
 </div>
 
@@ -2398,6 +2622,168 @@ function lockAdminV2() {
 
 // ─── INIT ───
 applyRitualState();
+
+
+// ─────────────────────────────────────────────────────
+// PRICE EDITOR SYSTEM — PIN: 1614
+// ─────────────────────────────────────────────────────
+
+var DEFAULT_PRICES = {
+  'r1-couple':{label:'Moonlight Romance Ritual',labelEs:'Ritual de Romance Luz de Luna',val:420},
+  'r2-couple':{label:'Tropical Zen Bamboo Journey',labelEs:'Viaje Zen de Bambú Tropical',val:440},
+  'r3-couple':{label:'Hispaniola Cacao Bliss',labelEs:'Hispaniola Éxtasis de Cacao',val:400},
+  'r4-couple':{label:'Blue Lagoon Deep Sea Connection',labelEs:'Laguna Azul Mar Profundo',val:380},
+  'r5-couple':{label:"The Traveler's Reset",labelEs:'El Reinicio del Viajero',val:380},
+  'r6-couple':{label:'Aloe & Quartz Sun Healing',labelEs:'Aloe y Cuarzo Sanación Solar',val:390},
+  'r7-couple':{label:'Caribbean Soulmates',labelEs:'Caribe Almas Gemelas',val:460},
+  'r8-couple':{label:'Pure Gold Anniversary Glow',labelEs:'Oro Puro Resplandor de Aniversario',val:520},
+  'r9-couple':{label:'Moringaia Signature Ritual',labelEs:'Ritual Signature Moringaia',val:520},
+  'm-swedish-50':{label:'Pure Bliss Swedish · 50 min',labelEs:'Masaje Sueco Pure Bliss · 50 min',val:215},
+  'm-swedish-80':{label:'Pure Bliss Swedish · 80 min',labelEs:'Masaje Sueco · 80 min',val:249},
+  'm-tissue-50':{label:'Euphoric Deep Tissue · 50 min',labelEs:'Tejido Profundo Eufórico · 50 min',val:229},
+  'm-tissue-80':{label:'Euphoric Deep Tissue · 80 min',labelEs:'Tejido Profundo Eufórico · 80 min',val:269},
+  'm-stone':{label:'Volcanic Stone Ritual · 80 min',labelEs:'Masaje Piedras Volcánicas · 80 min',val:285},
+  'm-aroma-50':{label:'Caribbean Aromatherapy · 50 min',labelEs:'Aromaterapia Caribeña · 50 min',val:225},
+  'm-aroma-80':{label:'Caribbean Aromatherapy · 80 min',labelEs:'Aromaterapia Caribeña · 80 min',val:259},
+  'm-prenatal-50':{label:'Prenatal Wellness · 50 min',labelEs:'Bienestar Prenatal · 50 min',val:189},
+  'm-prenatal-75':{label:'Prenatal Wellness · 75 min',labelEs:'Bienestar Prenatal · 75 min',val:219},
+  'f-botox':{label:'Collagen Botox Effect Facial',labelEs:'Facial Efecto Botox con Colágeno',val:259},
+  'f-vitc':{label:'Vitamin C Radiance Facial',labelEs:'Facial Luminosidad Vitamina C',val:235},
+  'f-hydro':{label:'Hydro Vegan Glow Facial',labelEs:'Facial Hidro Vegano Luminoso',val:215},
+  'f-detox':{label:'Deep Cleansing Detox Facial · 80 min',labelEs:'Facial Detox Limpieza Profunda · 80 min',val:275},
+  'f-barber':{label:'Barber Experience Facial',labelEs:'Facial Experiencia Barbero para Él',val:215},
+  'f-aftersun':{label:'After Sun Recovery Facial',labelEs:'Facial Recuperación After Sun',val:215},
+  'b-aftersun':{label:'After Sun Body Wrap',labelEs:'Envoltura Corporal After Sun',val:229},
+  'b-earth':{label:'Earth Experience Wrap',labelEs:'Envoltura Experiencia Tierra',val:209},
+  'b-ocean':{label:'Ocean Experience Wrap',labelEs:'Envoltura Experiencia Océano',val:209},
+  'b-algae':{label:'Detox Algae Body Wrap',labelEs:'Envoltura Detox de Algas',val:209},
+  'n-mani':{label:'Spa Manicure',labelEs:'Manicura Spa',val:69},
+  'n-pedi':{label:'Spa Pedicure',labelEs:'Pedicura Spa',val:85},
+  'n-gel-change':{label:'Gel Polish Change',labelEs:'Cambio Esmalte Gel',val:45},
+  'n-classic':{label:'Classic Polish Change',labelEs:'Cambio Esmalte Clásico',val:35},
+  'n-gel-remove':{label:'Gel Polish Removal',labelEs:'Remoción Esmalte Gel',val:49},
+};
+
+var PRICE_GROUPS = {
+  rituals:['r1-couple','r2-couple','r3-couple','r4-couple','r5-couple','r6-couple','r7-couple','r8-couple','r9-couple'],
+  massage:['m-swedish-50','m-swedish-80','m-tissue-50','m-tissue-80','m-stone','m-aroma-50','m-aroma-80','m-prenatal-50','m-prenatal-75'],
+  facial:['f-botox','f-vitc','f-hydro','f-detox','f-barber','f-aftersun'],
+  body:['b-aftersun','b-earth','b-ocean','b-algae'],
+  nails:['n-mani','n-pedi','n-gel-change','n-classic','n-gel-remove'],
+};
+
+function loadPrices(){try{var s=localStorage.getItem('serpc-prices-v1');if(s)return JSON.parse(s);}catch(e){}var d={};Object.keys(DEFAULT_PRICES).forEach(function(k){d[k]=DEFAULT_PRICES[k].val;});return d;}
+function savePricesData(d){try{localStorage.setItem('serpc-prices-v1',JSON.stringify(d));}catch(e){}}
+
+function applyAllPrices(){
+  var prices=loadPrices();
+  // Ritual couple prices
+  document.querySelectorAll('[data-ritual]').forEach(function(card){
+    var id=card.getAttribute('data-ritual');
+    var pid='r'+id+'-couple';
+    if(!prices[pid])return;
+    var el=card.querySelector('.ritual-price-couple');
+    if(el)el.textContent='$'+prices[pid];
+  });
+  // Section-based prices
+  var sections={
+    'massages':{
+      main:['m-swedish-50','m-tissue-50','m-stone','m-aroma-50','m-prenatal-50'],
+      notes:['m-swedish-80','m-tissue-80','m-aroma-80','m-prenatal-75'],
+      notePrefix:['80 min · $','80 min · $','80 min · $','75 min · $']
+    },
+    'facials':{main:['f-botox','f-vitc','f-hydro','f-detox','f-barber','f-aftersun'],notes:[],notePrefix:[]},
+    'body':{main:['b-aftersun','b-earth','b-ocean','b-algae'],notes:[],notePrefix:[]},
+  };
+  Object.keys(sections).forEach(function(sid){
+    var sec=document.getElementById(sid);if(!sec)return;
+    var cfg=sections[sid];
+    var mainEls=sec.querySelectorAll('.t-card-price-main');
+    cfg.main.forEach(function(k,i){if(mainEls[i]&&prices[k])mainEls[i].textContent='$'+prices[k];});
+    var noteEls=sec.querySelectorAll('.t-card-price-note');
+    cfg.notes.forEach(function(k,i){if(noteEls[i]&&prices[k])noteEls[i].textContent=cfg.notePrefix[i]+'$'+prices[k];});
+  });
+  // Nails
+  var nailsSec=document.getElementById('nails');
+  if(nailsSec){var minis=nailsSec.querySelectorAll('.mini-price');PRICE_GROUPS.nails.forEach(function(k,i){if(minis[i]&&prices[k])minis[i].textContent='$'+prices[k];});}
+}
+
+// ─── PRICE PIN ───
+var PRICE_PIN='1614',pricePinStr='',pricePinUnlocked=false,pricePinAttempts=0,pricePinLocked=false,ppLockTmr=null;
+function pricePin(d){if(pricePinLocked||pricePinStr.length>=4)return;pricePinStr+=d;updPPDots();if(pricePinStr.length===4)setTimeout(checkPricePin,120);}
+function pricePinDel(){if(pricePinLocked)return;pricePinStr=pricePinStr.slice(0,-1);updPPDots();}
+function updPPDots(){for(var i=0;i<4;i++){var d=document.getElementById('ppdot'+i);if(d)d.classList.toggle('filled',i<pricePinStr.length);}}
+function checkPricePin(){
+  if(pricePinStr===PRICE_PIN){
+    pricePinUnlocked=true;pricePinAttempts=0;
+    document.getElementById('pricePinScreen').style.display='none';
+    document.getElementById('priceEditorContent').style.display='block';
+    buildPriceEditor();
+  } else {
+    pricePinAttempts++;pricePinStr='';updPPDots();
+    var err=document.getElementById('pricePinErr');
+    if(pricePinAttempts>=3){
+      pricePinLocked=true;var rem=30;
+      err.textContent='Locked · '+rem+'s';
+      ppLockTmr=setInterval(function(){rem--;err.textContent='Locked · '+rem+'s';if(rem<=0){clearInterval(ppLockTmr);pricePinLocked=false;pricePinAttempts=0;err.textContent='';}},1000);
+    } else {
+      err.textContent='Incorrect PIN · '+(3-pricePinAttempts)+' remaining';
+    }
+  }
+}
+
+// ─── PRICE EDITOR UI ───
+function buildPriceEditor(){
+  var prices=loadPrices();
+  var isEs=document.body.classList.contains('es');
+  var groupMap={rituals:'priceRowsRituals',massage:'priceRowsMassage',facial:'priceRowsFacial',body:'priceRowsBody',nails:'priceRowsNails'};
+  Object.keys(groupMap).forEach(function(grp){
+    var el=document.getElementById(groupMap[grp]);if(!el)return;
+    el.innerHTML=PRICE_GROUPS[grp].map(function(key){
+      var def=DEFAULT_PRICES[key];if(!def)return'';
+      var lbl=isEs?def.labelEs:def.label;
+      var val=prices[key]||def.val;
+      return'<div class="price-row"><div class="price-row-label">'+lbl+'</div><div class="price-input-wrap"><span class="price-dollar">$</span><input class="price-input" type="number" id="pi-'+key+'" value="'+val+'" min="0" max="9999"></div></div>';
+    }).join('');
+  });
+}
+
+function savePrices(){
+  var newP={};
+  Object.keys(DEFAULT_PRICES).forEach(function(k){
+    var el=document.getElementById('pi-'+k);
+    newP[k]=el?Math.max(0,parseInt(el.value)||DEFAULT_PRICES[k].val):loadPrices()[k]||DEFAULT_PRICES[k].val;
+  });
+  savePricesData(newP);applyAllPrices();
+  var msg=document.getElementById('priceSavedMsg');
+  if(msg){msg.classList.add('show');setTimeout(function(){msg.classList.remove('show');},3000);}
+}
+
+function resetPrices(){
+  if(!confirm('Reset all prices to original values?'))return;
+  localStorage.removeItem('serpc-prices-v1');
+  applyAllPrices();buildPriceEditor();
+  var msg=document.getElementById('priceSavedMsg');
+  if(msg){msg.classList.add('show');setTimeout(function(){msg.classList.remove('show');},2500);}
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.admin-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.admin-tab-pane').forEach(function(p){p.classList.remove('active');});
+  var btn=document.querySelector('.admin-tab[onclick="switchTab(\'' + tab + '\')"]');
+  var pane=document.getElementById('tab-'+tab);
+  if(btn)btn.classList.add('active');
+  if(pane)pane.classList.add('active');
+  if(tab==='prices'&&pricePinUnlocked){
+    document.getElementById('pricePinScreen').style.display='none';
+    document.getElementById('priceEditorContent').style.display='block';
+    buildPriceEditor();
+  }
+}
+
+// Apply prices on page load
+document.addEventListener('DOMContentLoaded', function(){applyAllPrices();});
+
 </script>
 
 </body>
